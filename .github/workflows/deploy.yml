@@ -1,0 +1,48 @@
+name: Deploy
+on: 
+  push:
+    branches:
+      - 'develop'
+      - 'staging'
+      - 'master'
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: install dependencies
+        run: npm ci
+      - name: execute lint
+        run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: install dependencies
+        run: npm ci
+      - name: execute tests
+        run: npm run test
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Install NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - name: install dependencies
+      run: npm ci
+    - name: deploy
+      run: npm run build
