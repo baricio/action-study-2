@@ -33,6 +33,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: cache-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: install dependencies
         run: npm ci
       - name: execute tests
@@ -47,6 +52,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 18
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: cache-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: install dependencies
       run: npm ci
     - name: deploy
